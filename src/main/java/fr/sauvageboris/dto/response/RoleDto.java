@@ -1,4 +1,4 @@
-package fr.sauvageboris.demo.controller.dto;
+package fr.sauvageboris.dto.response;
 
 public class RoleDto {
 

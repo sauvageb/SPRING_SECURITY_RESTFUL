@@ -1,8 +1,10 @@
-package fr.sauvageboris.demo;
+package fr.sauvageboris;
 
-import fr.sauvageboris.demo.repository.UserRepository;
-import fr.sauvageboris.demo.repository.entity.Role;
-import fr.sauvageboris.demo.repository.entity.User;
+import fr.sauvageboris.repository.UserRepository;
+import fr.sauvageboris.repository.entity.Role;
+import fr.sauvageboris.repository.entity.RoleEnum;
+import fr.sauvageboris.repository.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,15 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Arrays;
 
 @SpringBootApplication
+@RequiredArgsConstructor
 public class DemoApplication {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-
-    public DemoApplication(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
@@ -30,8 +28,14 @@ public class DemoApplication {
     CommandLineRunner commandLineRunner() {
         return args -> {
             if (userRepository.findByUsername("boris").isEmpty()) {
-                User user = new User("boris", passwordEncoder.encode("boris"));
-                user.setRoleList(Arrays.asList(new Role("USER")));
+                User user = User
+                        .builder()
+                        .username("sauvageb")
+                        .firstName("Boris")
+                        .lastName("Sauvage")
+                        .password(passwordEncoder.encode("qwerty"))
+                        .roleList(Arrays.asList(new Role(RoleEnum.ROLE_USER)))
+                        .build();
                 userRepository.save(user);
             }
         };

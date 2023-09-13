@@ -1,7 +1,7 @@
-package fr.sauvageboris.demo.controller;
+package fr.sauvageboris.controller;
 
-import fr.sauvageboris.demo.controller.dto.UserDto;
-import fr.sauvageboris.demo.repository.UserRepository;
+import fr.sauvageboris.dto.response.UserDto;
+import fr.sauvageboris.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,10 +1,7 @@
-package fr.sauvageboris.demo.repository.entity;
+package fr.sauvageboris.repository.entity;
 
-import fr.sauvageboris.demo.controller.dto.RoleDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import fr.sauvageboris.dto.response.RoleDto;
+import jakarta.persistence.*;
 
 @Entity
 public class Role {
@@ -13,12 +10,14 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum roleName;
 
     public Role() {
     }
-    public Role(String name) {
-        this.name = name;
+
+    public Role(RoleEnum name) {
+        this.roleName = name;
     }
 
     public Long getId() {
@@ -29,16 +28,16 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public RoleEnum getRoleName() {
+        return roleName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRoleName(RoleEnum roleName) {
+        this.roleName = roleName;
     }
 
     public RoleDto toDto() {
-        return new RoleDto(id, name);
+        return new RoleDto(id, roleName.name());
     }
 }
 

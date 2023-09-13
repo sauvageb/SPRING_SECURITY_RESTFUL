@@ -1,7 +1,8 @@
-package fr.sauvageboris.demo.repository.entity;
+package fr.sauvageboris.repository.entity;
 
-import fr.sauvageboris.demo.controller.dto.UserDto;
+import fr.sauvageboris.dto.response.UserDto;
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -18,18 +23,12 @@ public class User implements UserDetails {
     private Long id;
     @Column(unique = true)
     private String username;
+    private String firstName;
+    private String lastName;
     private String password;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Role> roleList;
-
-    public User() {
-    }
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 
     public UserDto toDto() {
         return new UserDto(id, username, roleList.stream().map(r -> r.toDto()).collect(Collectors.toList()));
@@ -59,7 +58,7 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roleList
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
                 .toList();
     }
 
@@ -73,28 +72,4 @@ public class User implements UserDetails {
         return password;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Role> getRoleList() {
-        return roleList;
-    }
-
-    public void setRoleList(List<Role> roleList) {
-        this.roleList = roleList;
-    }
 }
